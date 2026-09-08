@@ -8,10 +8,11 @@
     <link rel="shortcut icon" href="dist/images/favicon.ico" type="image/x-icon">
     <title>Rutas formativas | Escuela de Diseño - Duoc UC</title>
     <!-- Estilos -->
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">    
-<link rel="stylesheet" href="dist/libs/owl.carousel/assets/owl.carousel.min.css">
-<link rel="stylesheet" href="dist/css/style.css">
-<link rel="stylesheet" href="dist/css/footer-duoc.css">    <!-- Google Tag Manager -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="dist/libs/owl.carousel/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="dist/css/footer-duoc.css">    
+    <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
             w[l] = w[l] || []; w[l].push({
                 'gtm.start':
@@ -226,13 +227,22 @@
                 <div id="suggested-routes" class="suggested-routes">
                         <h4 :class="[ 'suggested-routes__title', { 'has-selected': hasSelected }]">Carreras</h4>
                         <template v-for="carrera in carreras">
-                            <div :id="carrera.slug" v-on:mouseenter="setActive(carrera.slug)" :class="[ 'careers__wrapper', {'active': carrera.active}, {'inactive': carrera.inactive} ]" :style="'--career-color: ' + carrera.color">
+                            <div :id="carrera.slug" v-on:mouseenter="setActive(carrera.slug)" :class="[ 'careers__wrapper', 'careers-new-wrapper', {'active': carrera.active}, {'inactive': carrera.inactive} ]" :style="'--career-color: ' + carrera.color">
                                 <h3 class="careers-title" v-html="carrera.nombre"></h3>
-                                <a :href="`#modal-${carrera.slug}`" :data-toggle="canHover ? `modal` : ``" class="formative-route-link" v-on:click="setMobileActive(carrera.slug, $event)">
-                                    <svg class="svg-chevron-right-dims">
-                                        <use xlink:href="#chevron-right"></use>
-                                    </svg>
-                                </a>
+                                <div>
+                                    <a :href="`#modal-${carrera.slug}`" :data-toggle="canHover ? `modal` : ``" class="formative-route-link career-especialization technique" v-on:click="setMobileActive(carrera.slug, $event)">
+                                        salidas técnicas
+                                        <svg class="svg-chevron-right-dims">
+                                            <use xlink:href="#chevron-right"></use>
+                                        </svg>
+                                    </a>
+                                    <a :href="`#modal-${carrera.slug}`" :data-toggle="canHover ? `modal` : ``" class="formative-route-link career-especialization especialization" v-on:click="setMobileActive(carrera.slug, $event)">
+                                        especializaciones
+                                        <svg class="svg-chevron-right-dims">
+                                            <use xlink:href="#chevron-right"></use>
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
                             <div v-if="carrera.active" class="career__specializations">
                                 <div class="mention__wrapper active">

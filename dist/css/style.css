@@ -5902,3 +5902,43 @@ body:not(.body--tiene-menciones) .progress-indicator--articulation .progress-ste
         font-weight: 700; }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+.careers__wrapper {
+  position: relative;
+}
+.careers-new-wrapper {
+  padding-right: 250px;
+}
+.career-especialization {
+  display: block;
+  text-transform: uppercase;
+  color: #2b2b2b !important;
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
+  position: absolute;
+  min-height: 33px;
+  line-height: 33px;
+  min-width: 250px;
+  padding-left: 20px;
+  right: 0;
+  .svg-chevron-right-dims {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+}
+.careers-new-wrapper:hover .career-especialization {
+  color: #fff !important;
+}
+.career-especialization:hover {
+  background-color: #2b2b2b;
+  color: #FFF !important;
+  text-decoration: none;
+}
+.technique {
+  top: 0;
+}
+.especialization {
+  bottom: 0;
+  border-top: 6px solid #fff;
+}
