@@ -5907,7 +5907,7 @@ body:not(.body--tiene-menciones) .progress-indicator--articulation .progress-ste
   position: relative;
 }
 .careers-new-wrapper {
-  padding-right: 300px;
+  padding-right: 320px;
 }
 .career-especialization {
   display: block;
@@ -5918,7 +5918,7 @@ body:not(.body--tiene-menciones) .progress-indicator--articulation .progress-ste
   position: absolute;
   min-height: 33px;
   line-height: 33px;
-  min-width: 300px;
+  min-width: 320px;
   padding-left: 20px;
   right: 0;
   .svg-chevron-right-dims {
@@ -5941,4 +5941,10 @@ body:not(.body--tiene-menciones) .progress-indicator--articulation .progress-ste
 .especialization {
   bottom: 0;
   border-top: 6px solid #fff;
+}
+
+@media (min-width: 1200px) {
+    .suggested-routes {
+        grid-template-columns: minmax(0, 900px) 1fr;
+    }
 }
