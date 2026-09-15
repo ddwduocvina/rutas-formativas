@@ -227,16 +227,28 @@
                 <div id="suggested-routes" class="suggested-routes">
                         <h4 :class="[ 'suggested-routes__title', { 'has-selected': hasSelected }]">Carreras</h4>
                         <template v-for="carrera in carreras">
-                            <div :id="carrera.slug" v-on:mouseenter="setActive(carrera.slug)" :class="[ 'careers__wrapper', 'careers-new-wrapper', {'active': carrera.active}, {'inactive': carrera.inactive} ]" :style="'--career-color: ' + carrera.color">
+                            <div :id="carrera.slug" v-on:mouseenter="setActive(carrera.slug, 'especialidades')" :class="[ 'careers__wrapper', 'careers-new-wrapper', {'active': carrera.active}, {'inactive': carrera.inactive} ]" :style="'--career-color: ' + carrera.color">
                                 <h3 class="careers-title" v-html="carrera.nombre"></h3>
                                 <div>
-                                    <a :href="`#modal-${carrera.slug}`" :data-toggle="canHover ? `modal` : ``" class="formative-route-link career-especialization technique" v-on:click="setMobileActive(carrera.slug, $event)">
+                                    <a
+                                    :href="`#modal-${carrera.slug}`"
+                                    :data-toggle="canHover ? `modal` : ``"
+                                    class="formative-route-link career-especialization technique"
+                                    v-on:mouseover.stop="genericActive(carrera.slug, 'tecnicas')"
+                                    v-on:click="setMobileActive(carrera.slug, 'tecnicas', $event)"
+                                    >
                                         salidas técnicas
                                         <svg class="svg-chevron-right-dims">
                                             <use xlink:href="#chevron-right"></use>
                                         </svg>
                                     </a>
-                                    <a :href="`#modal-${carrera.slug}`" :data-toggle="canHover ? `modal` : ``" class="formative-route-link career-especialization especialization" v-on:click="setMobileActive(carrera.slug, $event)">
+                                    <a
+                                    :href="`#modal-${carrera.slug}`"
+                                    :data-toggle="canHover ? `modal` : ``"
+                                    class="formative-route-link career-especialization especialization"
+                                    v-on:mouseover.stop="genericActive(carrera.slug, 'especialidades')"
+                                    v-on:click="setMobileActive(carrera.slug, 'especialidades', $event)"
+                                    >
                                         especializaciones
                                         <svg class="svg-chevron-right-dims">
                                             <use xlink:href="#chevron-right"></use>
@@ -254,38 +266,43 @@
                                     </a>
                                 </div>
                                 <!-- especializaciones -->
-                                <h4 class="suggested-routes__title">Especializaciones</h4>
-                                <template v-for="especialidad in especialidades">
-                                    <div v-if="!especialidad.inactive" :id="especialidad.slug" class="mention__wrapper active">
+                                <template v-if="selectedList === 'especialidades'">
+                                    <h4 class="suggested-routes__title">Especializaciones</h4>
+
+                                    <template v-for="especialidad in especialidades" :key="especialidad.slug">
+                                        <div
+                                        v-if="!especialidad.inactive"
+                                        :id="especialidad.slug"
+                                        class="mention__wrapper active"
+                                        >
                                         <h3 class="mention-title" v-html="especialidad.nombre"></h3>
-                                        <a :href="`${especialidad.link}`" class="formative-route-link">
+
+                                        <a :href="especialidad.link" class="formative-route-link">
                                             <svg class="svg-chevron-right-dims">
-                                                <use xlink:href="#chevron-right"></use>
+                                            <use xlink:href="#chevron-right"></use>
                                             </svg>
                                         </a>
-                                    </div>
+                                        </div>
+                                    </template>
                                 </template>
                                 <!-- tecnicas -->
-                               <h4
-                                v-if="tecnicasDeCarrera.length"
-                                class="suggested-routes__title"
-                                >
-                                Salidas técnicas
-                                </h4>
+                               <template v-if="selectedList === 'tecnicas'">
+                                <h4 class="suggested-routes__title">Salidas técnicas</h4>
 
                                 <div
-                                v-for="tecnica in tecnicasDeCarrera"
-                                :key="tecnica.slug"
-                                class="mention__wrapper active"
+                                    v-for="tecnica in tecnicasDeCarrera"
+                                    :key="tecnica.slug"
+                                    class="mention__wrapper active"
                                 >
-                                <h3 class="mention-title" v-html="tecnica.nombre"></h3>
+                                    <h3 class="mention-title" v-html="tecnica.nombre"></h3>
 
-                                <a :href="tecnica.link" class="formative-route-link">
+                                    <a :href="tecnica.link" class="formative-route-link">
                                     <svg class="svg-chevron-right-dims">
-                                    <use xlink:href="#chevron-right"></use>
+                                        <use xlink:href="#chevron-right"></use>
                                     </svg>
-                                </a>
+                                    </a>
                                 </div>
+                                </template>
                             </div>
                         </template>
                         <!-- // -->

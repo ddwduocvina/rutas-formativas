@@ -165,135 +165,150 @@ jQuery(document).ready( function ($) {
 // programs-home.js
 // Implementación en Vue de los programas de estudio de landing page principal
 
-if ( typeof Vue !== "undefined" && $('#programs-home').length > 0) {
-	const { createApp } = Vue;
-	createApp({
-		data() {
-			return {
-				carreras,
-				especialidades,
-				tecnicas,
-				hasSelected: false,
-				canHover: window.screen.width > 992
+// programs-home.js
+
+if (typeof Vue !== 'undefined' && document.querySelector('#programs-home')) {
+  const { createApp } = Vue;
+
+  createApp({
+    data() {
+      return {
+        carreras,
+        especialidades,
+        tecnicas,
+        hasSelected: false,
+        canHover: window.innerWidth > 992,
+		selectedList: 'especialidades',
+
+        tecnicasPorCarrera: {
+          'diseno-de-ambientes': [
+            'visualizacion-renderizado-espacios',
+            'decoracion-ambientación-de-interiores'
+          ],
+          'diseno-de-vestuario': [
+            'patronaje-confeccion-de-vestuario',
+            'tecnico-diseno-de-vestuario'
+          ],
+          'diseno-grafico': [
+            'produccion-de-piezas-graficas'
+          ],
+          'diseno-industrial-e-innovacion-en-productos': [
+            'modelado-3d-y-visualizacion-de-productos'
+          ],
+          'ilustracion-para-contextos-globales': [
+            'dibujante-para-proyectos-ilustrados'
+          ]
+        }
+      };
+    },
+
+    computed: {
+      carreraActiva() {
+        return this.carreras.find(carrera => carrera.active === true);
+      },
+
+      tecnicasDeCarrera() {
+        if (!this.carreraActiva) return [];
+
+        const slugs = this.tecnicasPorCarrera[this.carreraActiva.slug] || [];
+
+        return this.tecnicas.filter(tecnica =>
+          slugs.includes(tecnica.slug)
+        );
+      }
+    },
+
+    mounted() {
+      this.addDefaultInactive();
+      window.addEventListener('resize', this.handleResize);
+    },
+
+    beforeUnmount() {
+      window.removeEventListener('resize', this.handleResize);
+    },
+
+    methods: {
+      addDefaultInactive() {
+        [...this.carreras, ...this.especialidades].forEach(item => {
+          item.active = false;
+          item.inactive = true;
+          item.disabled = false;
+        });
+      },
+
+      setActive(carreraSlug, tipo) {
+		if (!this.canHover) return;
+
+		this.genericActive(carreraSlug, tipo);
+	  },
+
+
+      setMobileActive(carreraSlug, tipo, event) {
+		if (this.canHover) return;
+
+		event.preventDefault();
+
+		const mismaCarrera = this.carreraActiva?.slug === carreraSlug;
+		const mismoListado = this.selectedList === tipo;
+
+		if (mismaCarrera && mismoListado) {
+			this.resetActive();
+			return;
+		}
+
+		this.genericActive(carreraSlug, tipo);
+	  },
+
+      genericActive(carreraSlug, tipo = 'especialidades') {
+		this.hasSelected = true;
+		this.selectedList = tipo;
+
+		this.carreras.forEach(carrera => {
+			const seleccionada = carrera.slug === carreraSlug;
+			carrera.active = seleccionada;
+			carrera.inactive = !seleccionada;
+		});
+
+		this.especialidades.forEach(especialidad => {
+			especialidad.inactive = true;
+			especialidad.disabled = true;
+		});
+
+		const carrera = this.carreraActiva;
+
+		if (!carrera) return;
+
+		carrera.especialidades.forEach(especialidad => {
+			const item = this.especialidades.find(
+			item => item.slug === especialidad.slug
+			);
+
+			if (item) {
+			item.inactive = false;
+			item.disabled = false;
 			}
-		},
-		computed: {
-			carreraActiva() {
-				return this.carreras.find(carrera => carrera.active);
-			},
+		});
+	  },
 
-			tecnicasDeCarrera() {
-				if (!this.carreraActiva) return [];
+      resetActive() {
+        this.hasSelected = false;
 
-				const tecnicasPorCarrera = {
-				'diseno-de-ambientes': [
-					'visualizacion-renderizado-espacios',
-					'decoracion-ambientación-de-interiores'
-				],
-				'diseno-de-vestuario': [
-					'patronaje-confeccion-de-vestuario',
-					'tecnico-diseno-de-vestuario'
-				],
-				'diseno-grafico': [
-					'produccion-de-piezas-graficas'
-				],
-				'diseno-industrial-e-innovacion-en-productos': [
-					'modelado-3d-y-visualizacion-de-productos'
-				],
-				'ilustracion-para-contextos-globales': [
-					'dibujante-para-proyectos-ilustrados'
-				]
-				};
+        this.carreras.forEach(carrera => {
+          carrera.active = false;
+          carrera.inactive = true;
+        });
 
-				const slugs = tecnicasPorCarrera[this.carreraActiva.slug] || [];
+        this.especialidades.forEach(especialidad => {
+          especialidad.inactive = true;
+          especialidad.disabled = false;
+        });
+      },
 
-				return this.tecnicas.filter(tecnica =>
-				slugs.includes(tecnica.slug)
-				);
-			}
-		},
-		mounted() {
-			// Predeterminadamente se desactivan todos los programas al cargar
-			this.addDefaultInactive();
-			window.addEventListener('resize', this.handleResize);
-		},
-		methods: {
-			addDefaultInactive() {
-				[...this.carreras, ...this.especialidades, ...this.tecnicas].forEach(item => {
-					item.active = false;
-					item.inactive = true;
-					item.disabled = false;
-				});
-			},
-			setActive: function (carreraSlug) {
-				if ( ! this.canHover ) {
-					return;
-				}
- 				this.genericActive(carreraSlug);
-			},
-			setMobileActive: function(carreraSlug, event) {
-				if ( this.canHover ) {
-					return;
-				}
-				event.preventDefault();
-				// Si la carrera seleccionada está activa, se debe desactivar
-				const selected = this.carreras.find(carrera => {
-					return carrera.slug === carreraSlug && carrera.active === true;
-				});
-				if ( selected !== undefined ) {
-					this.resetActive();
-				} else {
-					this.genericActive(carreraSlug);
-				}
-			},
-			genericActive(carreraSlug) {
-				this.hasSelected = true;
-
-				this.carreras.forEach(carrera => {
-					const seleccionada = carrera.slug === carreraSlug;
-
-					carrera.active = seleccionada;
-					carrera.inactive = !seleccionada;
-
-					if (!seleccionada) return;
-
-					this.especialidades.forEach(item => {
-					item.inactive = true;
-					item.disabled = true;
-					});
-
-					carrera.especialidades.forEach(especialidad => {
-					const item = this.especialidades.find(
-						item => item.slug === especialidad.slug
-					);
-
-					if (item) {
-						item.inactive = false;
-						item.disabled = false;
-					}
-					});
-				});
-			},
-
-
-			resetActive() {
-				this.hasSelected = false;
-
-				this.carreras.forEach(carrera => {
-					carrera.active = false;
-					carrera.inactive = true;
-				});
-
-				[...this.especialidades, ...this.tecnicas].forEach(item => {
-					item.inactive = true;
-					item.disabled = false;
-				});
-			},
-			handleResize: function () {
-				this.canHover = window.screen.width > 992;
-			}
-		},
-	}).mount('#programs-home');
+      handleResize() {
+        this.canHover = window.innerWidth > 992;
+      }
+    }
+  }).mount('#programs-home');
 }
 //
 // Gumshoe
