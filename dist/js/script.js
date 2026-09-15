@@ -172,8 +172,44 @@ if ( typeof Vue !== "undefined" && $('#programs-home').length > 0) {
 			return {
 				carreras,
 				especialidades,
+				tecnicas,
 				hasSelected: false,
 				canHover: window.screen.width > 992
+			}
+		},
+		computed: {
+			carreraActiva() {
+				return this.carreras.find(carrera => carrera.active);
+			},
+
+			tecnicasDeCarrera() {
+				if (!this.carreraActiva) return [];
+
+				const tecnicasPorCarrera = {
+				'diseno-de-ambientes': [
+					'visualizacion-renderizado-espacios',
+					'decoracion-ambientación-de-interiores'
+				],
+				'diseno-de-vestuario': [
+					'patronaje-confeccion-de-vestuario',
+					'tecnico-diseno-de-vestuario'
+				],
+				'diseno-grafico': [
+					'produccion-de-piezas-graficas'
+				],
+				'diseno-industrial-e-innovacion-en-productos': [
+					'modelado-3d-y-visualizacion-de-productos'
+				],
+				'ilustracion-para-contextos-globales': [
+					'dibujante-para-proyectos-ilustrados'
+				]
+				};
+
+				const slugs = tecnicasPorCarrera[this.carreraActiva.slug] || [];
+
+				return this.tecnicas.filter(tecnica =>
+				slugs.includes(tecnica.slug)
+				);
 			}
 		},
 		mounted() {
@@ -182,10 +218,12 @@ if ( typeof Vue !== "undefined" && $('#programs-home').length > 0) {
 			window.addEventListener('resize', this.handleResize);
 		},
 		methods: {
-			addDefaultInactive: function() {
-				[...this.carreras, ...this.especialidades].forEach((program, i) => {
-					program.inactive = true;
-				})
+			addDefaultInactive() {
+				[...this.carreras, ...this.especialidades, ...this.tecnicas].forEach(item => {
+					item.active = false;
+					item.inactive = true;
+					item.disabled = false;
+				});
 			},
 			setActive: function (carreraSlug) {
 				if ( ! this.canHover ) {
@@ -208,81 +246,49 @@ if ( typeof Vue !== "undefined" && $('#programs-home').length > 0) {
 					this.genericActive(carreraSlug);
 				}
 			},
-			genericActive: function(carreraSlug) {
+			genericActive(carreraSlug) {
 				this.hasSelected = true;
 
-				this.carreras.map((carrera) => {
-					carrera.active = carrera.inactive = false;
+				this.carreras.forEach(carrera => {
+					const seleccionada = carrera.slug === carreraSlug;
 
-					if (carrera.slug === carreraSlug) {
-						carrera.active = true;
+					carrera.active = seleccionada;
+					carrera.inactive = !seleccionada;
 
-						// Primero desactivar todas las especialidades
-						this.especialidades.map(esp => {
-							esp.inactive = true;
-							esp.disabled = true; // ← deshabilitar clic
-						});
+					if (!seleccionada) return;
 
-						// Luego activar solo las relacionadas con la carrera
-						carrera.especialidades.forEach((especialidad) => {
-							let especialidadSelected = this.especialidades.find(item => item.slug === especialidad.slug);
-							if (especialidadSelected) {
-								especialidadSelected.inactive = false;
-								especialidadSelected.disabled = false; // ← habilitar clic
-							}
-						});
+					this.especialidades.forEach(item => {
+					item.inactive = true;
+					item.disabled = true;
+					});
 
-					} else {
-						carrera.inactive = true;
+					carrera.especialidades.forEach(especialidad => {
+					const item = this.especialidades.find(
+						item => item.slug === especialidad.slug
+					);
+
+					if (item) {
+						item.inactive = false;
+						item.disabled = false;
 					}
+					});
 				});
 			},
 
-			resetActive: function() {
+
+			resetActive() {
 				this.hasSelected = false;
 
-				this.carreras.map((carrera) => {
+				this.carreras.forEach(carrera => {
 					carrera.active = false;
 					carrera.inactive = true;
 				});
 
-				this.especialidades.map(esp => {
-					esp.inactive = true;
-					esp.disabled = false; // ← volver a habilitar clic
+				[...this.especialidades, ...this.tecnicas].forEach(item => {
+					item.inactive = true;
+					item.disabled = false;
 				});
 			},
-			// genericActive: function(carreraSlug) {
- 			// 	this.hasSelected = true;
-			// 	this.carreras.map((carrera) => {
-			// 		carrera.active = carrera.inactive = false;
-			// 		if ( carrera.slug === carreraSlug ) {
-			// 			carrera.active = true;
-			// 			this.especialidades.map(esp => {
-			// 				esp.inactive = true;
-			// 			})
-			// 			carrera.especialidades.forEach((especialidad) => {
-			// 				let especialidadSelected = this.especialidades.find(item => {
-			// 					return especialidad.slug === item.slug;
-			// 				})
-			// 				if ( especialidadSelected ) {
-			// 					especialidadSelected.inactive = false;
-			// 				}
-			// 			});
-			// 		} else {
-			// 			carrera.inactive = true;
-			// 		}
-			// 	});
-			// },
-			// resetActive: function() {
-			// 	this.hasSelected = false;
-			// 	this.carreras.map((carrera) => {
-			// 		carrera.active = false;
-			// 		carrera.inactive = true;
-			// 		this.especialidades.map(esp => {
-			// 			esp.inactive = true;
-			// 		})
-			// 	});
-			// },
 			handleResize: function () {
 				this.canHover = window.screen.width > 992;
 			}
