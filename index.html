@@ -234,7 +234,7 @@
                                     :href="`#modal-${carrera.slug}`"
                                     :data-toggle="canHover ? `modal` : ``"
                                     class="formative-route-link career-especialization technique"
-                                    v-on:mouseover.stop="genericActive(carrera.slug, 'tecnicas')"
+                                    v-on:mouseenter="setActive(carrera.slug, 'tecnicas')"
                                     v-on:click="setMobileActive(carrera.slug, 'tecnicas', $event)"
                                     >
                                         salidas técnicas
@@ -246,7 +246,7 @@
                                     :href="`#modal-${carrera.slug}`"
                                     :data-toggle="canHover ? `modal` : ``"
                                     class="formative-route-link career-especialization especialization"
-                                    v-on:mouseover.stop="genericActive(carrera.slug, 'especialidades')"
+                                    v-on:mouseenter="setActive(carrera.slug, 'especialidades')"
                                     v-on:click="setMobileActive(carrera.slug, 'especialidades', $event)"
                                     >
                                         especializaciones
