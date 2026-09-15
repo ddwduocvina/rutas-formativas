@@ -227,7 +227,7 @@
                 <div id="suggested-routes" class="suggested-routes">
                         <h4 :class="[ 'suggested-routes__title', { 'has-selected': hasSelected }]">Carreras</h4>
                         <template v-for="carrera in carreras">
-                            <div :id="carrera.slug" v-on:mouseenter="setActive(carrera.slug, 'especialidades')" :class="[ 'careers__wrapper', 'careers-new-wrapper', {'active': carrera.active}, {'inactive': carrera.inactive} ]" :style="'--career-color: ' + carrera.color">
+                            <div :id="carrera.slug" v-on:mouseenter="setActive(carrera.slug)" :class="[ 'careers__wrapper', 'careers-new-wrapper', {'active': carrera.active}, {'inactive': carrera.inactive} ]" :style="'--career-color: ' + carrera.color">
                                 <h3 class="careers-title" v-html="carrera.nombre"></h3>
                                 <div>
                                     <a
@@ -315,16 +315,42 @@
                             </a>
                         </div>
                         <div class="suggested-routes__options">
-                            <h4 class="suggested-routes__title">Especializaciones</h4>
+                            <h4 class="suggested-routes__title">
+                                {{ selectedList === 'tecnicas' ? 'Salidas técnicas' : 'Especializaciones' }}
+                            </h4>
+
                             <div class="suggested-routes__specialization">
-                                <div :id="especialidad.slug" v-for="especialidad in especialidades" :class="[ 'mention__wrapper', {'active': especialidad.active}, {'inactive': especialidad.inactive}, { 'disabled': especialidad.disabled } ]">
-                                    <h3 class="mention-title" v-html="especialidad.nombre"></h3>
-                                    <a :href="`${especialidad.link}`" class="formative-route-link">
-                                        <svg class="svg-chevron-right-dims">
-                                            <use xlink:href="#chevron-right"></use>
-                                        </svg>
-                                    </a>
-                                </div>
+                                <template v-if="selectedList === 'especialidades'">
+                                    <div
+                                        v-for="especialidad in especialidades"
+                                        :key="especialidad.slug"
+                                        :id="especialidad.slug"
+                                        :class="[ 'mention__wrapper', {'active': especialidad.active}, {'inactive': especialidad.inactive}, { 'disabled': especialidad.disabled } ]"
+                                    >
+                                        <h3 class="mention-title" v-html="especialidad.nombre"></h3>
+                                        <a :href="especialidad.link" class="formative-route-link">
+                                            <svg class="svg-chevron-right-dims">
+                                                <use xlink:href="#chevron-right"></use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </template>
+
+                                <template v-else>
+                                    <div
+                                        v-for="tecnica in tecnicasDeCarrera"
+                                        :key="tecnica.slug"
+                                        :id="tecnica.slug"
+                                        class="mention__wrapper active"
+                                    >
+                                        <h3 class="mention-title" v-html="tecnica.nombre"></h3>
+                                        <a :href="tecnica.link" class="formative-route-link">
+                                            <svg class="svg-chevron-right-dims">
+                                                <use xlink:href="#chevron-right"></use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                 </div>
