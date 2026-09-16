@@ -4070,7 +4070,6 @@ body {
 @media (min-width: 992px) {
   .suggested-routes__specialization--tecnicas {
     transform: translateY(var(--technical-offset, 0));
-    transition: transform 0.2s ease-in-out;
     grid-auto-rows: minmax(100px, auto);
     align-content: start;
     overflow: visible; }
