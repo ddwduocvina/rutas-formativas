@@ -207,6 +207,11 @@ if (typeof Vue !== 'undefined' && document.querySelector('#programs-home')) {
         return this.carreras.find(carrera => carrera.active === true);
       },
 
+      carreraActivaIndex() {
+        const index = this.carreras.findIndex(carrera => carrera.active === true);
+        return index < 0 ? 0 : index;
+      },
+
       tecnicasDeCarrera() {
         if (!this.carreraActiva) return [];
 

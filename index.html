@@ -273,7 +273,7 @@
                                         <div
                                         v-if="!especialidad.inactive"
                                         :id="especialidad.slug"
-                                        class="mention__wrapper active"
+                                        class="mention__wrapper active technical-exit"
                                         >
                                         <h3 class="mention-title" v-html="especialidad.nombre"></h3>
 
@@ -319,7 +319,13 @@
                                 {{ selectedList === 'tecnicas' ? 'Salidas técnicas' : 'Especializaciones' }}
                             </h4>
 
-                            <div class="suggested-routes__specialization">
+                            <div
+                                :class="[
+                                    'suggested-routes__specialization',
+                                    { 'suggested-routes__specialization--tecnicas': selectedList === 'tecnicas' }
+                                ]"
+                                :style="{ '--technical-offset': `${carreraActivaIndex * 110}px` }"
+                            >
                                 <template v-if="selectedList === 'especialidades'">
                                     <div
                                         v-for="especialidad in especialidades"

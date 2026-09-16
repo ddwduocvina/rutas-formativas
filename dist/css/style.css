@@ -4067,6 +4067,18 @@ body {
       grid-template-rows: repeat(auto-fit, minmax(55px, auto));
       row-gap: 10px; } }
 
+@media (min-width: 992px) {
+  .suggested-routes__specialization--tecnicas {
+    transform: translateY(var(--technical-offset, 0));
+    transition: transform 0.2s ease-in-out;
+    grid-auto-rows: minmax(100px, auto);
+    align-content: start;
+    overflow: visible; }
+  .technical-exit {
+    height: auto;
+    min-height: 100px;
+    max-height: none; } }
+
 .suggested-tag {
   font-size: 0.91667rem;
   color: #2b2b2b;
@@ -4148,6 +4160,10 @@ body {
       gap: .5rem;
       padding-top: .5rem;
       padding-bottom: .5rem; } }
+
+.technical-exit {
+  background-color: #D9D9D9;
+  color: #2b2b2b; }
 
 .mention-title {
   font-size: 1.16667rem;
@@ -5942,7 +5958,6 @@ body:not(.body--tiene-menciones) .progress-indicator--articulation .progress-ste
   bottom: 0;
   border-top: 6px solid #fff;
 }
-
 @media (min-width: 1200px) {
     .suggested-routes {
         grid-template-columns: minmax(0, 900px) 1fr;
