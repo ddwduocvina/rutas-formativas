@@ -183,7 +183,7 @@ if (typeof Vue !== 'undefined' && document.querySelector('#programs-home')) {
         tecnicasPorCarrera: {
           'diseno-de-ambientes': [
             'visualizacion-renderizado-espacios',
-            'decoracion-ambientación-de-interiores'
+            'decoracion-ambientacion-de-interiores'
           ],
           'diseno-de-vestuario': [
             'patronaje-confeccion-de-vestuario',
